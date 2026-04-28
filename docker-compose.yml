@@ -1,0 +1,34 @@
+version: "3.9"
+services:
+  backend:
+    build: ./backend
+    ports: ["8000:8000"]
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - REDIS_URL=redis://redis:6379
+      - DATABASE_URL=sqlite:///./academic_ai.db
+    volumes:
+      - ./backend:/app
+      - chroma_data:/app/chroma_db
+    depends_on: 
+      - redis
+    networks:
+      - academicai-network
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    ports: ["6379:6379"]
+    volumes:
+      - redis_data:/data
+    networks:
+      - academicai-network
+    restart: unless-stopped
+
+volumes:
+  chroma_data:
+  redis_data:
+
+networks:
+  academicai-network:
+    driver: bridge

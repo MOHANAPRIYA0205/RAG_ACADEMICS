@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AcademicAI — Intelligent Academic Assistant</title>
+  <meta name="description" content="AI-powered academic assistant with RAG pipeline, multi-agent system, quiz generation, and analytics for Artificial Intelligence departments." />
+  <meta name="keywords" content="AI academic assistant, RAG, quiz generator, study planner, notes summarizer" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <!-- Marked.js for markdown rendering -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+</head>
+<body>
+  <!-- Loading Screen -->
+  <div id="loading-screen" class="loading-screen">
+    <div class="loader-content">
+      <div class="loader-logo">
+        <div class="logo-icon-lg">
+          <svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="18" stroke="url(#lg1)" stroke-width="2"/><path d="M13 20h14M20 13v14" stroke="url(#lg1)" stroke-width="2.5" stroke-linecap="round"/><defs><linearGradient id="lg1" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse"><stop stop-color="#6366f1"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs></svg>
+        </div>
+        <span class="loader-brand">AcademicAI</span>
+      </div>
+      <div class="loader-bar"><div class="loader-fill"></div></div>
+      <p class="loader-text">Initializing RAG Pipeline...</p>
+    </div>
+  </div>
+
+  <!-- App Shell -->
+  <div id="app" class="app-shell" style="display:none;">
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-wrap">
+          <div class="logo-icon">
+            <svg viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="12" stroke="url(#lg2)" stroke-width="1.5"/><path d="M9 14h10M14 9v10" stroke="url(#lg2)" stroke-width="2" stroke-linecap="round"/><defs><linearGradient id="lg2" x1="0" y1="0" x2="28" y2="28" gradientUnits="userSpaceOnUse"><stop stop-color="#6366f1"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs></svg>
+          </div>
+          <span class="logo-text">AcademicAI</span>
+        </div>
+        <button id="sidebar-toggle" class="sidebar-toggle" title="Toggle Sidebar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Main</div>
+        <a href="#" class="nav-item active" data-page="dashboard" id="nav-dashboard">
+          <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>
+          <span class="nav-label">Dashboard</span>
+        </a>
+        <a href="#" class="nav-item" data-page="chat" id="nav-chat">
+          <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span>
+          <span class="nav-label">AI Chat</span>
+          <span class="nav-badge">RAG</span>
+        </a>
+        <a href="#" class="nav-item" data-page="upload" id="nav-upload">
+          <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg></span>
+          <span class="nav-label">Documents</span>
+        </a>
+        <a href="#" class="nav-item" data-page="quiz" id="nav-quiz">
+          <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01"/></svg></span>
+          <span class="nav-label">Quiz Engine</span>
+          <span class="nav-badge new">AI</span>
+        </a>
+
+        <div class="nav-section-label">Insights</div>
+        <a href="#" class="nav-item" data-page="analytics" id="nav-analytics">
+          <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>
+          <span class="nav-label">Analytics</span>
+        </a>
+        <a href="#" class="nav-item" data-page="profile" id="nav-profile">
+          <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+          <span class="nav-label">Profile</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="agent-status">
+          <div class="status-dot pulse"></div>
+          <span>5 Agents Active</span>
+        </div>
+        <button id="theme-toggle" class="theme-btn" title="Toggle Dark/Light Mode">
+          <span class="theme-icon dark-icon">🌙</span>
+          <span class="theme-icon light-icon" style="display:none">☀️</span>
+          <span class="theme-label">Dark Mode</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="main-content">
+      <!-- Top Bar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button id="mobile-menu-btn" class="mobile-menu-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+          </button>
+          <div class="breadcrumb" id="breadcrumb">
+            <span>Dashboard</span>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <div class="search-bar" id="global-search-bar">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            <input type="text" placeholder="Search documents, chats, quizzes..." id="global-search" />
+            <kbd>⌘K</kbd>
+          </div>
+          <button class="topbar-btn" id="voice-btn" title="Voice Input">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4M8 23h8"/></svg>
+          </button>
+          <div class="notification-btn-wrap">
+            <button class="topbar-btn" id="notif-btn" title="Notifications">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
+              <span class="notif-dot"></span>
+            </button>
+            <div class="notif-dropdown" id="notif-dropdown">
+              <div class="notif-header">Notifications</div>
+              <div class="notif-item unread">
+                <div class="notif-icon">🧠</div>
+                <div><strong>AI Suggestion:</strong> Revise Unit 3 — Neural Networks before exam</div>
+              </div>
+              <div class="notif-item unread">
+                <div class="notif-icon">📄</div>
+                <div><strong>Doc Processed:</strong> AI_Syllabus.pdf indexed successfully</div>
+              </div>
+              <div class="notif-item">
+                <div class="notif-icon">🏆</div>
+                <div><strong>Achievement:</strong> You earned "Quiz Master" badge!</div>
+              </div>
+              <div class="notif-item">
+                <div class="notif-icon">📅</div>
+                <div><strong>Reminder:</strong> Study session for Deep Learning at 6PM</div>
+              </div>
+            </div>
+          </div>
+          <div class="user-avatar-wrap" id="user-avatar-wrap">
+            <div class="user-avatar">MK</div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Page Content -->
+      <div class="page-container" id="page-container">
+        <!-- Pages are injected here by JS -->
+      </div>
+    </main>
+  </div>
+
+  <!-- Global Modals -->
+  <div id="modal-overlay" class="modal-overlay" style="display:none;">
+    <div class="modal-box" id="modal-box">
+      <button class="modal-close" id="modal-close">✕</button>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="js/rag.js"></script>
+  <script src="js/agents.js"></script>
+  <script src="js/quiz.js"></script>
+  <script src="js/analytics.js"></script>
+  <script src="js/upload.js"></script>
+  <script src="js/profile.js"></script>
+  <script src="js/chat.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
